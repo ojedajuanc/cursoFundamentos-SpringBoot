@@ -14,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import com.fundamentos.SpringBoot.fundamentos.persistence.User;
 import com.fundamentos.SpringBoot.fundamentos.repository.UserRepository;
 
-import sun.util.logging.resources.logging;
-
 @SpringBootApplication
 public class App implements CommandLineRunner {
 	
@@ -55,6 +53,7 @@ public class App implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		saveUsersInDataBase();
 		getInfoFromJPQL();
+		getInfoFromQueryMethod();
 	}
 	
 	public void saveUsersInDataBase() {
@@ -81,6 +80,15 @@ public class App implements CommandLineRunner {
 		LOGGER.info("El usuario encontrado es: " + 
 					userRepository.findByUserEmail("test7@mail.com")
 					.orElseThrow(()->new RuntimeException("No se encontró el usuario")));
+	}
+	
+	private void getInfoFromQueryMethod() {
+		userRepository.findByNameNotLike("Juan")
+				.stream()
+				.forEach((user)->LOGGER.info("Usuario con query method: " + user.getName()));
+				
+		LOGGER.info("ID Usuario con query method: "+ userRepository.findById((long) 3));
+		
 	}
 
 }
